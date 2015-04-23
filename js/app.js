@@ -65,6 +65,9 @@ $(function() {
                     }
                 });
             });
+        },
+        saveData: function() {
+            localStorage.attendance = JSON.stringify(this.students);            
         }
     }
 
@@ -88,8 +91,7 @@ $(function() {
             $allCheckboxes.each(function() {
                 student.days.push($(this).prop('checked'));
             });
-            localStorage.attendance = JSON.stringify(model.students);
-            return student;
+            model.saveData();
         }
     }
     var attendanceGridView = {
@@ -122,12 +124,12 @@ $(function() {
                 }
                 $row.append("<td class='missed-col'></td>");
                 $row.find("input[type='checkbox']").click(function(event) {
-                    var std = optopus.setAttendance(student,$(event.target).closest("tr"));
-                    view.countMissing(std, $(event.target).closest("tr"));
+                    optopus.setAttendance(student,$(event.target).closest("tr"));
+                    view.countMissing(student, $(event.target).closest("tr"));
                 });
                 view.body.append($row);
-                var std = optopus.setAttendance(student, $row);
-                view.countMissing(std, $row);
+                optopus.setAttendance(student, $row);
+                view.countMissing(student, $row);
             });
         },
         // Count a student's missed days
